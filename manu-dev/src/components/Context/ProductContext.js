@@ -12,7 +12,7 @@ export function ProductProvider({children}){
     const [products, setProducts]=useState("")
     
     useEffect(() => {
-        fetch("http://localhost:8080/api/productos/")
+        fetch("https://clear-phrygian-broccoli.glitch.me/api/productos/")
         .then(data=>data.json())    
         .then(db=>{
                 setProducts(db);

@@ -16,7 +16,7 @@ export default function UpdateProduct() {
         const price = document.getElementById("price").value
         const stock = document.getElementById("stock").value
         const data = { id, name, description, code, urlImage, price, stock }
-        fetch(`http://localhost:8080/api/productos/${id_param}`, {
+        fetch(`https://clear-phrygian-broccoli.glitch.me/api/productos/${id_param}`, {
             method: "PUT",
             body: JSON.stringify(data),
             headers: {

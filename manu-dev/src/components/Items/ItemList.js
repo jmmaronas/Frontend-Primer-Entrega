@@ -6,7 +6,6 @@ import CartItemContainer from "../ShoppingCart/CartItemContainer.js";
 export default function ItemList({products}) {
     const [open, setOpen] = useState(false)
     const openCart=()=>setOpen(true)
-
     return (
         <div className="bg-white">
             <button className="absolute flex right-0 items-center justify-center rounded-full border border-transparent bg-red-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-red-700" onClick={() => openCart()}>Cart</button>

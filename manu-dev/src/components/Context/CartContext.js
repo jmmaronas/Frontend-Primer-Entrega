@@ -15,7 +15,7 @@ export function CartProvider({ children }) {
 
     async function newCart() {
         console.log("paso por acaa")
-        const data=await fetch(`http://localhost:8080/api/carrito`, {
+        const data=await fetch(`https://clear-phrygian-broccoli.glitch.me//api/carrito`, {
             method: "POST",
             body:JSON.stringify({compra:[]}),
             headers: {
@@ -29,15 +29,18 @@ export function CartProvider({ children }) {
         return cart.some(e => e.id === product.id);
     }
     async function addToCart(product, cantidad) {
-        let carrito= CarritoId || await newCart()
-        setCarritoId(carrito)
+        if(!CarritoId){
+            let carrito=await newCart()
+            setCarritoId(carrito)
+        }
         let arrayNuevo = cart.slice(0)
         let indice = arrayNuevo.findIndex(e => e.id === product.id);
         indice === -1 ? arrayNuevo.push({ ...product, cantidad }) : arrayNuevo[indice].cantidad += cantidad;
         arrayNuevo.push(product)
         setCart(arrayNuevo);
         //setCantidadProductos(cantidadProductos + cantidad);
-        fetch(`http://localhost:8080/api/carrito/${carrito}/productos`, {
+        
+        fetch(`https://clear-phrygian-broccoli.glitch.me/api/carrito/${CarritoId}/productos`, {
             method: "POST",
             body: JSON.stringify(product),
             headers:{
@@ -53,12 +56,12 @@ export function CartProvider({ children }) {
         setCart(carritoFinal);
         setCantidadProductos(cantidadProductos - cantidadProductoEliminado);
         localStorage.setItem("carrito", JSON.stringify(carritoFinal));
-        await fetch(`http://localhost:8080/api/carrito/${CarritoId}/productos/${id}`, {
+        await fetch(`https://clear-phrygian-broccoli.glitch.me/api/carrito/${CarritoId}/productos/${id}`, {
             method: "DELETE"
         })
     }
     async function clearCart() {
-        await fetch(`http://localhost:8080/api/carrito/${CarritoId}`,{
+        await fetch(`https://clear-phrygian-broccoli.glitch.me/api/carrito/${CarritoId}`,{
             method:"delete"
         })
         setCart([]);
@@ -66,6 +69,7 @@ export function CartProvider({ children }) {
         setCarritoId(null)
         localStorage.clear();
     }
+    
 
     useEffect(() => {
         let cantidaStorage = 0;

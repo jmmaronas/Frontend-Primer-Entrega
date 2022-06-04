@@ -9,7 +9,7 @@ export default function ItemsDetailContiner() {
     let { id } = useParams();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/api/productos/${id}`)
+        fetch(`https://clear-phrygian-broccoli.glitch.me/api/productos/${id}`)
             .then(data =>data.json())
             .then(db => {
                 setItem(db);

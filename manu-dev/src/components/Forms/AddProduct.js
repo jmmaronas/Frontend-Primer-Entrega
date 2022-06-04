@@ -3,7 +3,7 @@ export default function AddProduct() {
         <div className="mt-10 sm:mt-0 lg:w-2/3 lg:m-auto">
             <div className="md:container mt-10">
                 <div className="mt-5 md:mt-0 md:col-span-2">
-                    <form action="http://localhost:8080/api/productos" method="POST">
+                    <form action="https://clear-phrygian-broccoli.glitch.me/api/productos" method="POST">
                         <div className="shadow overflow-hidden sm:rounded-md">
                             <div className="px-4 py-5 bg-slate-200 sm:p-6">
                                 <div className="grid grid-cols-6 gap-6">
@@ -81,7 +81,7 @@ export default function AddProduct() {
                                             name="stock"
                                             id="stock"
                                             autoComplete="family-name"
-                                            className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                            className="mt-1 p-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                         />
                                     </div>
 
