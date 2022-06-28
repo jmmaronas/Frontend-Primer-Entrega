@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import { useProductContext } from "../Context/ProductContext"
+import { useProductContext } from "../Context/ProductContext.js"
 
 export default function UpdateProduct() {
     const { products } = useProductContext()
@@ -16,19 +16,13 @@ export default function UpdateProduct() {
         const price = document.getElementById("price").value
         const stock = document.getElementById("stock").value
         const data = { id, name, description, code, urlImage, price, stock }
-        fetch(`https://clear-phrygian-broccoli.glitch.me/api/productos/${id_param}`, {
-            method: "PUT",
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        UpdateProduct(id_param, data)
     }
     return (
         <div className="mt-10 sm:mt-0 lg:w-2/3 lg:m-auto">
             <div className="md:container mt-10">
                 <div className="mt-5 md:mt-0 md:col-span-2">
-                    <form onSubmit={handleSubmit} action={`http://localhost:8080/api/productos/${id_param}`} method="PUT">
+                    <form onSubmit={handleSubmit} action="#" method="PUT">
                         <div className="shadow overflow-hidden sm:rounded-md">
                             <div className="px-4 py-5 bg-slate-200 sm:p-6">
                                 <div className="grid grid-cols-6 gap-6">

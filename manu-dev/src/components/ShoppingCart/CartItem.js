@@ -12,15 +12,15 @@ export default function CartItem({product, quitar}) {
             <div className="ml-2 flex flex-1 flex-col">
                 <div>
                     <div className="flex justify-between text-base font-medium text-gray-900">
-                        <p className="ml-2">$ {product.price}</p>
+                        <p className="ml-2">$ {product.qty}</p>
                     </div>
                     <p className="mt-1 text-sm text-gray-500">{product.description}</p>
                 </div>
                 <div className="flex flex-1 items-end justify-between text-sm">
-                    <p className="text-gray-500">Qty {product.stock}</p>
+                    <p className="text-gray-500">Qty {product.productId}</p>
 
                     <div className="flex">
-                        <DeleteCartItem itemId={product.id} quitar={quitar}/>
+                        <DeleteCartItem itemId={product.productId} quitar={quitar}/>
                     </div>
                 </div>
             </div>

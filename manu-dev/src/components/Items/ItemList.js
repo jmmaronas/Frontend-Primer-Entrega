@@ -14,7 +14,7 @@ export default function ItemList({products}) {
                 <Link to="/products/add" className="my-8 flex items-center justify-center rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-green-700">Agregar Productos</Link>
                 <div className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 gap-x-6 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                     {products.map((product) => (
-                        <Items key={product.id} product={product}/>
+                        <Items key={product._id} product={product}/>
                     ))}
                 </div>
             </div>

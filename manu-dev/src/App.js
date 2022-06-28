@@ -7,7 +7,8 @@ import { CartProvider } from './components/Context/CartContext.js';
 import { ProductProvider } from "./components/Context/ProductContext.js";
 import CheckOut from './components/ShoppingCart/CheckOut.js'
 import UpdateProduct from './components/Forms/UpdateProduct.js';
-import ItemsDetailContiner from './components/Items/ItemDetailContiner';
+import ItemsDetailContiner from './components/Items/ItemDetailContiner.js';
+import { Login } from './components/Login/Login.js';
 
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
       <ProductProvider>
         <CartProvider>
         <Routes>
-          <Route path='/' element={<ItemListContainer />} />
+          <Route path='/' element={<Login />} />
+          <Route path='/product' element={<ItemListContainer />} />
           <Route path='/product/:id' element={<ItemsDetailContiner/>}/>
           <Route path='/products/add' element={<AddProduct />} />
           <Route path='/products/update/:id' element={<UpdateProduct />} />

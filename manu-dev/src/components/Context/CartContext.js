@@ -1,83 +1,107 @@
 import { createContext, useContext, useState, useEffect } from "react"
 
-const cartContext = createContext();
+const cartContext = createContext()
 
 export const { Provider } = cartContext;
 
 export function useCartContext() {
-    return useContext(cartContext);
+    return useContext(cartContext)
 }
 
 export function CartProvider({ children }) {
-    const [cart, setCart] = useState(JSON.parse(localStorage.getItem("carrito")) || []);
-    const [cantidadProductos, setCantidadProductos] = useState(0);
-    const [CarritoId, setCarritoId]=useState(null)
+    const [cart, setCart] = useState("")
+    const [cantidadProductos, setCantidadProductos] = useState(0)
+    const [carritoId, setCarritoId] = useState(null)
+
+    useEffect(() => {
+        if (!carritoId) {
+            (async () => {
+                let id=await newCart()
+                setCarritoId(id)
+                setCart([])
+                fetch(`http://localhost:8080/api/carrito/${id}/productos`)
+                    .then(data => data.json())
+                    .then(db => {
+                        console.log(db.compra)
+                        setCart(db.compra)
+                        setCantidadProductos(cart.reduce((acc, e) => acc + e.qty, 0));
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    })
+                return () => {
+
+                }
+            })()
+        } else {
+            fetch(`http://localhost:8080/api/carrito/${carritoId}/productos`)
+                .then(data => data.json())
+                .then(db => {
+                    console.log(db.compra)
+                    setCart(db.compra)
+                    setCantidadProductos(cart.reduce((acc, e) => acc + e.qty, 0));
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+            return () => {
+
+            };
+        }
+
+    }, [])
 
     async function newCart() {
-        console.log("paso por acaa")
-        const data=await fetch(`https://clear-phrygian-broccoli.glitch.me//api/carrito`, {
+        const data = await fetch(`http://localhost:8080/api/carrito`, {
             method: "POST",
-            body:JSON.stringify({compra:[]}),
+            body: JSON.stringify({ compra: [] }),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        const {id} =await data.json()
+        const { id } = await data.json()
+        console.log(id)
+        //setCarritoId(id)
         return id
     }
     function isInCart(product) {
         return cart.some(e => e.id === product.id);
     }
-    async function addToCart(product, cantidad) {
-        if(!CarritoId){
-            let carrito=await newCart()
-            setCarritoId(carrito)
-        }
-        let arrayNuevo = cart.slice(0)
-        let indice = arrayNuevo.findIndex(e => e.id === product.id);
-        indice === -1 ? arrayNuevo.push({ ...product, cantidad }) : arrayNuevo[indice].cantidad += cantidad;
-        arrayNuevo.push(product)
+    async function addToCart(id, qty) {
+        let arrayNuevo = cart?.slice(0) || []
+        let indice = arrayNuevo.findIndex(e => e.productId === id);
+        indice === -1 ? arrayNuevo.push({ productId: id, qty: qty }) : arrayNuevo[indice].qty += qty;
         setCart(arrayNuevo);
-        //setCantidadProductos(cantidadProductos + cantidad);
-        
-        fetch(`https://clear-phrygian-broccoli.glitch.me/api/carrito/${CarritoId}/productos`, {
+        setCantidadProductos(cantidadProductos + qty);
+        fetch(`http://localhost:8080/api/carrito/${carritoId}/productos`, {
             method: "POST",
-            body: JSON.stringify(product),
-            headers:{
+            body: JSON.stringify(arrayNuevo),
+            headers: {
                 'Content-Type': 'application/json'
             }
         })
-        localStorage.setItem("carrito", JSON.stringify(arrayNuevo));        
+        //localStorage.setItem("carrito", JSON.stringify(arrayNuevo));        
     }
     async function delToCart(id) {
         let carrito = cart.slice(0);
+        let cantidadProductoEliminado = carrito.find(e => e.productId === id).qty;
         let carritoFinal = carrito.filter(e => e.id !== id)
-        let cantidadProductoEliminado = carrito.find(e => e.id === id).cantidad;
         setCart(carritoFinal);
         setCantidadProductos(cantidadProductos - cantidadProductoEliminado);
-        localStorage.setItem("carrito", JSON.stringify(carritoFinal));
-        await fetch(`https://clear-phrygian-broccoli.glitch.me/api/carrito/${CarritoId}/productos/${id}`, {
+        //localStorage.setItem("carrito", JSON.stringify(carritoFinal));
+        await fetch(`http://localhost:8080/api/carrito/${carritoId}/productos/${id}`, {//update
             method: "DELETE"
         })
     }
     async function clearCart() {
-        await fetch(`https://clear-phrygian-broccoli.glitch.me/api/carrito/${CarritoId}`,{
-            method:"delete"
+        await fetch(`http://localhost:8080/api/carrito/${carritoId}`, {
+            method: "delete"
         })
         setCart([]);
         setCantidadProductos(0);
         setCarritoId(null)
         localStorage.clear();
     }
-    
-
-    useEffect(() => {
-        let cantidaStorage = 0;
-        if (localStorage.getItem("carrito")) {
-            JSON.parse(localStorage.getItem("carrito")).map(e => { return cantidaStorage += e.cantidad })
-        }
-        setCantidadProductos(cantidaStorage);
-    }, []);
 
     const valorDelContexto = {
         cart,

@@ -12,7 +12,7 @@ export function ProductProvider({children}){
     const [products, setProducts]=useState("")
     
     useEffect(() => {
-        fetch("https://clear-phrygian-broccoli.glitch.me/api/productos/")
+        fetch("http://localhost:8080/api/productos/")
         .then(data=>data.json())    
         .then(db=>{
                 setProducts(db);
@@ -28,15 +28,31 @@ export function ProductProvider({children}){
 
     const addProduct=(newProduct)=>{
         setProducts([...products, newProduct])
+        fetch(`http://localhost:8080/api/productos`, {
+            method: "PUT",
+            body: JSON.stringify(products),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
     }
 
-    const updateProduct=()=>{
-
+    const updateProduct=(id, product)=>{
+        setProducts([...products, product])
+        fetch(`http://localhost:8080/api/productos/${id}`, {
+            method: "PUT",
+            body: JSON.stringify(product),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        
     }
 
     const delProduct= async (id)=>{
-        console.log(Number(id))
-        await fetch(`http://localhost:8080/api/productos/${Number(id)}`,{
+        let arrayNuevo=products.slice(0)
+        setProducts(arrayNuevo.filter(e=>e.di!==id))
+        await fetch(`http://localhost:8080/api/productos/${id}`,{
             method:"delete"
         })
     }

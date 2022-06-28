@@ -1,9 +1,25 @@
+import { useProductContext } from "../Context/ProductContext"
+
 export default function AddProduct() {
+    const {addProduct}=useProductContext()
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const id = document.getElementById("id").value
+        const name = document.getElementById("productName").value
+        const description = document.getElementById("description").value
+        const code = document.getElementById("code").value
+        const urlImage = document.getElementById("urlImage").value
+        const price = document.getElementById("price").value
+        const stock = document.getElementById("stock").value
+        const data = { id, name, description, code, urlImage, price, stock }
+        addProduct(data)
+    }
+
     return (
         <div className="mt-10 sm:mt-0 lg:w-2/3 lg:m-auto">
             <div className="md:container mt-10">
                 <div className="mt-5 md:mt-0 md:col-span-2">
-                    <form action="https://clear-phrygian-broccoli.glitch.me/api/productos" method="POST">
+                    <form onSubmit={handleSubmit}  method="POST">
                         <div className="shadow overflow-hidden sm:rounded-md">
                             <div className="px-4 py-5 bg-slate-200 sm:p-6">
                                 <div className="grid grid-cols-6 gap-6">

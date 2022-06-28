@@ -7,7 +7,7 @@ function Items({ product }) {
     const { delProduct } = useProductContext()
     return (
         <div className="conainer">
-            <Link to={`/product/${product.id}`} className="group">
+            <Link to={`/product/${product._id}`} className="group">
                 <div className="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
                     <img
                         src={product.urlImage}
@@ -21,9 +21,9 @@ function Items({ product }) {
                 <p className="mt-1 text-lg font-medium text-gray-900">$ {product.price}</p>
             </Link>
                 <div className='flex justify-between text-lg'>
-                    <button onClick={() => addToCart(product)} className="btn bg-blue-400 px-4 text-center rounded-md text-white">Add</button>
-                    <Link to={`/products/update/${product.id}`} className="btn bg-green-400 px-4 rounded-md text-white">Update</Link>
-                    <button onClick={() => delProduct(product.id)} className="btn bg-red-500 px-4 rounded-md text-white">Delete</button>
+                    <button onClick={() => addToCart(product._id, 1)} className="btn bg-blue-400 px-4 text-center rounded-md text-white">Add</button>
+                    <Link to={`/products/update/${product._id}`} className="btn bg-green-400 px-4 rounded-md text-white">Update</Link>
+                    <button onClick={() => delProduct(product._id)} className="btn bg-red-500 px-4 rounded-md text-white">Delete</button>
                 </div>
             <dir className="pl-0 flex justify-between w-full">
                 <h3 className="mt-4 text-xs text-gray-700">Codigo: {product.code}</h3>

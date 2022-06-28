@@ -8,7 +8,7 @@ function CartItemContainer({open, setOpen}){
         delToCart(id)
     }
     let total=0;
-    cart.map(e=>{return total+=(e.price*e.cantidad)})
+    cart&&cart.map(e=>{return total+=(e.price)})
     return(       
         <div className="tableContainer container">
             <ShoppingCart open={open} setOpen={setOpen} clearCart={clearCart} quitar={quitar} total={total} cart={cart}/>           
