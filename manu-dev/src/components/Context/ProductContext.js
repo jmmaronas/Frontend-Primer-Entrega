@@ -28,9 +28,10 @@ export function ProductProvider({children}){
 
     const addProduct=(newProduct)=>{
         setProducts([...products, newProduct])
+        console.log(products)
         fetch(`http://localhost:8080/api/productos`, {
-            method: "PUT",
-            body: JSON.stringify(products),
+            method: "POST",
+            body: JSON.stringify(newProduct),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -59,6 +60,7 @@ export function ProductProvider({children}){
     
     const valorDelContexto={ 
         products,
+        setProducts,
         getAll,
         addProduct, 
         delProduct,  

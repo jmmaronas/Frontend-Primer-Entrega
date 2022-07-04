@@ -53,9 +53,11 @@ export default function ShoppingCart({ open, setOpen, clearCart, quitar, total, 
                                         <div className="mt-8">
                                             <div className="flow-root">
                                                 <ul className="divide-y divide-gray-200">
-                                                    {cart&&cart.map((e) => (
+                                                    {cart&&cart.map((e) =>{ 
+                                                        console.log(e)
+                                                        return(
                                                         <CartItem key={e.productId} product={e} quitar={quitar} />
-                                                    ))}
+                                                    )})}
                                                 </ul>
                                             </div>
                                         </div>

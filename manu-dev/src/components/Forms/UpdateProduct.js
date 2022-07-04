@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom"
 import { useProductContext } from "../Context/ProductContext.js"
+import { useNavigate } from "react-router-dom"
 
 export default function UpdateProduct() {
-    const { products } = useProductContext()
+    let navigate=useNavigate()
+    const { products, updateProduct } = useProductContext()
     const db = products.slice(0)
     const { id: id_param } = useParams()
-    const product = db.find(e => e.id === Number(id_param))
+    const product = db.find(e => e._id === id_param)
     const handleSubmit = (e) => {
         e.preventDefault()
         const id = document.getElementById("id").value
@@ -16,7 +18,8 @@ export default function UpdateProduct() {
         const price = document.getElementById("price").value
         const stock = document.getElementById("stock").value
         const data = { id, name, description, code, urlImage, price, stock }
-        UpdateProduct(id_param, data)
+        updateProduct(id_param, data)
+        navigate("/products", {replace:true})
     }
     return (
         <div className="mt-10 sm:mt-0 lg:w-2/3 lg:m-auto">
@@ -27,7 +30,7 @@ export default function UpdateProduct() {
                             <div className="px-4 py-5 bg-slate-200 sm:p-6">
                                 <div className="grid grid-cols-6 gap-6">
                                     <div className="col-span-6 sm:col-span-3">
-                                        <input type="text" name="id" id="id" defaultValue={product.id} hidden />
+                                        <input type="text" name="id" id="id" defaultValue={id_param} hidden />
                                         <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
                                             Nombre
                                         </label>

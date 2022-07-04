@@ -1,18 +1,20 @@
 import { useProductContext } from "../Context/ProductContext"
+import {useNavigate}from 'react-router-dom'
 
 export default function AddProduct() {
+    let navigate=useNavigate()
     const {addProduct}=useProductContext()
     const handleSubmit = (e) => {
-        e.preventDefault()
-        const id = document.getElementById("id").value
+        e.preventDefault()        
         const name = document.getElementById("productName").value
         const description = document.getElementById("description").value
         const code = document.getElementById("code").value
         const urlImage = document.getElementById("urlImage").value
         const price = document.getElementById("price").value
         const stock = document.getElementById("stock").value
-        const data = { id, name, description, code, urlImage, price, stock }
+        const data = { name, description, code, urlImage, price, stock }
         addProduct(data)
+        navigate("/products", {replace:true})
     }
 
     return (

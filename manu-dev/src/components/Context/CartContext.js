@@ -11,12 +11,13 @@ export function useCartContext() {
 export function CartProvider({ children }) {
     const [cart, setCart] = useState("")
     const [cantidadProductos, setCantidadProductos] = useState(0)
-    const [carritoId, setCarritoId] = useState(null)
+    const [carritoId, setCarritoId] = useState(JSON.parse(localStorage.getItem('id') || null))
 
     useEffect(() => {
         if (!carritoId) {
             (async () => {
-                let id=await newCart()
+                let id = await newCart()
+                localStorage.setItem('id', JSON.stringify(id))
                 setCarritoId(id)
                 setCart([])
                 fetch(`http://localhost:8080/api/carrito/${id}/productos`)
@@ -24,7 +25,7 @@ export function CartProvider({ children }) {
                     .then(db => {
                         console.log(db.compra)
                         setCart(db.compra)
-                        setCantidadProductos(cart.reduce((acc, e) => acc + e.qty, 0));
+                        setCantidadProductos(db.compra.reduce((acc, e) => acc + e.qty, 0));
                     })
                     .catch(error => {
                         console.error(error);
@@ -37,9 +38,9 @@ export function CartProvider({ children }) {
             fetch(`http://localhost:8080/api/carrito/${carritoId}/productos`)
                 .then(data => data.json())
                 .then(db => {
-                    console.log(db.compra)
+                    console.log(db)
                     setCart(db.compra)
-                    setCantidadProductos(cart.reduce((acc, e) => acc + e.qty, 0));
+                    setCantidadProductos(db.compra.reduce((acc, e) => acc + e.qty, 0));
                 })
                 .catch(error => {
                     console.error(error);
@@ -68,14 +69,20 @@ export function CartProvider({ children }) {
         return cart.some(e => e.id === product.id);
     }
     async function addToCart(id, qty) {
+        let newProduct
         let arrayNuevo = cart?.slice(0) || []
         let indice = arrayNuevo.findIndex(e => e.productId === id);
-        indice === -1 ? arrayNuevo.push({ productId: id, qty: qty }) : arrayNuevo[indice].qty += qty;
+        if (indice === -1) {
+            newProduct = {productId: id, qty}
+            arrayNuevo.push({ newProduct })
+        } else {
+            newProduct = {...arrayNuevo[indice], qty:qty += qty}
+        }
         setCart(arrayNuevo);
-        setCantidadProductos(cantidadProductos + qty);
+        setCantidadProductos(cantidadProductos + qty);        
         fetch(`http://localhost:8080/api/carrito/${carritoId}/productos`, {
             method: "POST",
-            body: JSON.stringify(arrayNuevo),
+            body: JSON.stringify(newProduct),
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -89,6 +96,7 @@ export function CartProvider({ children }) {
         setCart(carritoFinal);
         setCantidadProductos(cantidadProductos - cantidadProductoEliminado);
         //localStorage.setItem("carrito", JSON.stringify(carritoFinal));
+        console.log(`http://localhost:8080/api/carrito/${carritoId}/productos/${id}`)
         await fetch(`http://localhost:8080/api/carrito/${carritoId}/productos/${id}`, {//update
             method: "DELETE"
         })

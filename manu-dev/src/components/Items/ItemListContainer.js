@@ -1,20 +1,23 @@
 import ItemList from "./ItemList.js"
 import { useState, useEffect } from "react";
-//import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useProductContext } from "../Context/ProductContext.js";
 
 
 export default function ItemListConatiner() {
+    const { setProducts }= useProductContext()
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState(null);
-    //const { id } = useParams();
+    const { id } = useParams();
 
     useEffect(() => {
         fetch("http://localhost:8080/api/productos/")
         .then(data=>data.json())    
         .then(db=>{
-                setItems(db);
-                setIsLoaded(true);                
+                setProducts(db)
+                setItems(db)
+                setIsLoaded(true)                
             })
         .catch(error=>{
             setIsLoaded(true);
